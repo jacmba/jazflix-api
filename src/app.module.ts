@@ -11,6 +11,7 @@ import { Movie } from './model/movie.entity';
       type: DbConfig.TYPE,
       host: DbConfig.HOST,
       port: DbConfig.PORT,
+      database: DbConfig.DB,
       synchronize: DbConfig.SYNC,
       entities: [Movie],
     }),

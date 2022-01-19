@@ -7,4 +7,16 @@ export class Movie {
 
   @Column()
   title: string;
+
+  @Column()
+  description: string;
+
+  @Column()
+  image: string;
+
+  @Column()
+  video: string;
+
+  @Column()
+  extra: string;
 }
