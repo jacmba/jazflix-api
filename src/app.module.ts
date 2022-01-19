@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MoviesModule } from './movies/movies.module';
+import DbConfig from './config/db.config';
+import { Movie } from './model/movie.entity';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    MoviesModule,
+    TypeOrmModule.forRoot({
+      type: DbConfig.TYPE,
+      host: DbConfig.HOST,
+      port: DbConfig.PORT,
+      synchronize: DbConfig.SYNC,
+      entities: [Movie],
+    }),
+  ],
 })
 export class AppModule {}
