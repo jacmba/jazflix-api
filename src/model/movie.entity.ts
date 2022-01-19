@@ -18,5 +18,5 @@ export class Movie {
   video: string;
 
   @Column()
-  extra: string;
+  extra?: string;
 }
