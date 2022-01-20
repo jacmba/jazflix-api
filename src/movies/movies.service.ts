@@ -10,7 +10,16 @@ export class MoviesService {
     @InjectRepository(Movie) private moviesRepository: Repository<Movie>,
   ) {}
 
-  find(): Promise<MovieDto[]> {
-    return this.moviesRepository.find();
+  async find(): Promise<MovieDto[]> {
+    const movies = await this.moviesRepository.find();
+
+    return movies.map(
+      (m: Movie): MovieDto => ({
+        id: m.id,
+        title: m.title,
+        description: m.description,
+        image: m.image,
+      }),
+    );
   }
 }

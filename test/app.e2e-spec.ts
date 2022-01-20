@@ -2,11 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { doesNotMatch } from 'assert';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -15,10 +16,29 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/sections (GET)', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .get('/sections')
       .expect(200)
-      .expect('Hello World!');
+      .then((resp) => {
+        expect(resp.body).toBeDefined();
+        expect(resp.body.length).toBeGreaterThan(1);
+
+        const section = resp.body[0];
+
+        expect(section.title).toBe('Inicio');
+        expect(section.icon).toBe('mdi-home');
+        expect(section.to).toBe('/');
+      });
+  });
+
+  it('/movies (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/movies')
+      .expect(200)
+      .then((resp) => {
+        expect(resp.body).toBeDefined();
+        expect(resp.body).toBeGreaterThan(1);
+      });
   });
 });
