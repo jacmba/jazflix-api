@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesController } from './movies.controller';
 import { MoviesService } from './movies.service';
-import { Movie } from '../model/movie.entity';
+import MovieDto from '../model/dto/movie.dto';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
 
   const mockMoviesService = {
-    find: jest.fn().mockImplementation((): Promise<Movie[]> => {
+    find: jest.fn().mockImplementation((): Promise<MovieDto[]> => {
       return Promise.resolve([
         {
           id: '1',

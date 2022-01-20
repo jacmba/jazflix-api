@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Movie } from '../model/movie.entity';
+import { Movie } from '../model/entity/movie.entity';
 import { MoviesService } from './movies.service';
 
 describe('MoviesService', () => {

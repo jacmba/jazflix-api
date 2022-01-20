@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Movie } from '../model/movie.entity';
+import { Movie } from '../model/entity/movie.entity';
+import MovieDto from '../model/dto/movie.dto';
 
 @Injectable()
 export class MoviesService {
@@ -9,7 +10,7 @@ export class MoviesService {
     @InjectRepository(Movie) private moviesRepository: Repository<Movie>,
   ) {}
 
-  find(): Promise<Movie[]> {
+  find(): Promise<MovieDto[]> {
     return this.moviesRepository.find();
   }
 }

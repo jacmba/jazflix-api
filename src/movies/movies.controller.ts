@@ -1,13 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
-import { Movie } from 'src/model/movie.entity';
 import { MoviesService } from './movies.service';
+import MovieDto from '../model/dto/movie.dto';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Get()
-  getMovies(): Promise<Movie[]> {
+  getMovies(): Promise<MovieDto[]> {
     return this.moviesService.find();
   }
 }

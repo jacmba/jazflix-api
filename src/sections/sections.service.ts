@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import Section from '../model/section.entity';
+import Section from '../model/entity/section.entity';
+import SectionDto from '../model/dto/section.dto';
 
 @Injectable()
 export class SectionsService {
@@ -9,7 +10,15 @@ export class SectionsService {
     @InjectRepository(Section) private readonly repo: Repository<Section>,
   ) {}
 
-  find(): Promise<Section[]> {
-    return this.repo.find();
+  async find(): Promise<SectionDto[]> {
+    const sections = await this.repo.find();
+
+    return sections.map(
+      (s: Section): SectionDto => ({
+        title: s.title,
+        icon: s.icon,
+        to: s.to,
+      }),
+    );
   }
 }

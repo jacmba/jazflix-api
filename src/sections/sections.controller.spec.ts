@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import Section from '../model/section.entity';
 import { SectionsController } from './sections.controller';
 import { SectionsService } from './sections.service';
+import SectionDto from '../model/dto/section.dto';
 
 describe('SectionsController', () => {
   let controller: SectionsController;
 
   const mockService = {
-    find: jest.fn().mockImplementation((): Promise<Section[]> => {
+    find: jest.fn().mockImplementation((): Promise<SectionDto[]> => {
       return Promise.resolve([
         {
           id: '1',
@@ -42,7 +42,7 @@ describe('SectionsController', () => {
 
     expect(sections).toBeDefined();
     expect(sections.length).toBe(1);
-    expect(sections[0].id).toBe('1');
+    expect(sections[0].to).toBe('/test');
     expect(sections[0].title).toBe('My test section');
   });
 });

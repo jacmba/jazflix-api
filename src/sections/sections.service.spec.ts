@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import Section from '../model/section.entity';
+import Section from '../model/entity/section.entity';
 import { SectionsService } from './sections.service';
 
 describe('SectionsService', () => {
@@ -42,7 +42,7 @@ describe('SectionsService', () => {
 
     expect(sections).toBeDefined();
     expect(sections.length).toBe(1);
-    expect(sections[0].id).toBe('1');
+    expect(sections[0].to).toBe('test');
     expect(sections[0].icon).toBe('test-icon');
   });
 });
