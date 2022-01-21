@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  HttpException,
-  Param,
-  Res,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Param, Res } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import MovieDto from '../model/dto/movie.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
