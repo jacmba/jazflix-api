@@ -15,7 +15,10 @@ RUN npm ci \
 
 FROM node:14-alpine
 
+RUN mkdir /static
+
 ENV NODE_ENV production
+ENV STATIC_DIRECTORY /static
 
 USER node
 WORKDIR /home/node
