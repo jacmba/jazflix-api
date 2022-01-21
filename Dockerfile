@@ -1,30 +1,21 @@
 FROM node:14-alpine as builder
 
-ENV NODE_ENV build
-
-USER node
-WORKDIR /home/node
-
-COPY . /home/node
-
-RUN npm ci \
-  && npm run build \
-  && npm prune --production
-
-# ---
-
-FROM node:14-alpine
-
+RUN mkdir /app
+RUN mkdir /src
 RUN mkdir /static
+WORKDIR /src
 
-ENV NODE_ENV production
+COPY . .
+
+RUN npm run build
+
+RUN cp package.json /app/
+RUN cp node_modules /app/
+RUN cp dist /app/
+
+WORKDIR /app
+RUN rm -rf /src
+
 ENV STATIC_DIRECTORY /static
-
-USER node
-WORKDIR /home/node
-
-COPY --from=builder /home/node/package*.json /home/node/
-COPY --from=builder /home/node/node_modules/ /home/node/node_modules/
-COPY --from=builder /home/node/dist/ /home/node/dist/
 
 CMD ["node", "dist/main.js"]
