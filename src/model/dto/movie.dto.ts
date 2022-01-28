@@ -12,4 +12,7 @@ export default class MovieDto {
 
   @ApiProperty()
   image: string;
+
+  @ApiProperty()
+  extra?: string;
 }

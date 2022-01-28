@@ -23,6 +23,7 @@ export class MoviesService {
         title: m.title,
         description: m.description,
         image: m.image,
+        extra: m.extra,
       }),
     );
   }
