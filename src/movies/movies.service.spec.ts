@@ -74,7 +74,7 @@ describe('MoviesService', () => {
   });
 
   it('Should get a movie video from DB', async () => {
-    const video = await service.findOne('1');
+    const video = await service.findOne('1', '', '');
     expect(mockMoviesRepo.findOne).toHaveBeenCalledTimes(1);
     expect(mockMoviesRepo.findOne).toHaveBeenCalledWith('1');
     expect(mockVideoLoader.load).toHaveBeenCalledTimes(1);

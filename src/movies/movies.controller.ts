@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import { Controller, Get, Param, Query, Res } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import MovieDto from '../model/dto/movie.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
@@ -16,8 +16,13 @@ export class MoviesController {
 
   @Get(':id')
   @ApiOkResponse()
-  async getMovieVideo(@Param('id') id: string, @Res() res: Response) {
-    const video = await this.moviesService.findOne(id);
+  async getMovieVideo(
+    @Param('id') id: string,
+    @Res() res: Response,
+    @Query('start') start?: string,
+    @Query('end') end?: string,
+  ) {
+    const video = await this.moviesService.findOne(id, start, end);
 
     res.writeHead(200, {
       'Content-Type': 'video/mp4',
