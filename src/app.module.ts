@@ -5,6 +5,7 @@ import DbConfig from './config/db.config';
 import { Movie } from './model/entity/movie.entity';
 import { SectionsModule } from './sections/sections.module';
 import { AuthModule } from './auth/auth.module';
+import { TokenValidatorModule } from './token-validator/token-validator.module';
 import Section from './model/entity/section.entity';
 
 @Module({
@@ -20,6 +21,7 @@ import Section from './model/entity/section.entity';
     }),
     SectionsModule,
     AuthModule,
+    TokenValidatorModule,
   ],
 })
 export class AppModule {}

@@ -13,4 +13,7 @@ export default class AuthConfig {
 
   public static readonly CLIENT_SECRET =
     process.env.AUTH_CLIENT_SECRET || 'clientSecret';
+
+  public static readonly CERTS_URI =
+    process.env.AUTH_CERTS_URI || 'https://www.googleapis.com/oauth2/v1/certs';
 }
