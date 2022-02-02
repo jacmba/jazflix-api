@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 
@@ -10,5 +10,11 @@ export class AuthController {
   @ApiOkResponse()
   getAuth(): string {
     return this.authService.requestAuth();
+  }
+
+  @Get('token')
+  @ApiOkResponse()
+  getAuthToken(@Query('code') code: string): Promise<string> {
+    return this.authService.getToken(code);
   }
 }

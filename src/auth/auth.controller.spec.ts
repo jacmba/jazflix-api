@@ -9,6 +9,7 @@ describe('AuthController', () => {
     requestAuth: jest
       .fn()
       .mockImplementation(() => 'http://auth.com?client_id=123'),
+    getToken: jest.fn().mockResolvedValue('myMockToken'),
   };
 
   beforeEach(async () => {
@@ -32,5 +33,10 @@ describe('AuthController', () => {
   it('Should return uri given by service', () => {
     const result = controller.getAuth();
     expect(result).toBe('http://auth.com?client_id=123');
+  });
+
+  it('Should return a mock jwt', async () => {
+    const token = await controller.getAuthToken('myMockCode');
+    expect(token).toBe('myMockToken');
   });
 });
