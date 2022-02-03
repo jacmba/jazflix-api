@@ -2,6 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { SectionsController } from './sections.controller';
 import { SectionsService } from './sections.service';
 import SectionDto from '../model/dto/section.dto';
+import { AuthGuard } from '../auth/auth-guard';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import User from '../model/entity/user.entity';
+import { TokenValidatorService } from '../token-validator/token-validator.service';
 
 describe('SectionsController', () => {
   let controller: SectionsController;
@@ -19,6 +23,12 @@ describe('SectionsController', () => {
     }),
   };
 
+  const mockAuthGuard = {};
+
+  const mockUserRepo = {};
+
+  const mockTokenValidator = {};
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SectionsController],
@@ -26,6 +36,18 @@ describe('SectionsController', () => {
         {
           provide: SectionsService,
           useValue: mockService,
+        },
+        {
+          provide: AuthGuard,
+          useValue: mockAuthGuard,
+        },
+        {
+          provide: getRepositoryToken(User),
+          useValue: mockUserRepo,
+        },
+        {
+          provide: TokenValidatorService,
+          useValue: mockTokenValidator,
         },
       ],
     }).compile();

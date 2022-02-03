@@ -11,6 +11,7 @@ async function bootstrap() {
     .setTitle('Jazflix API')
     .setDescription(info.description)
     .setVersion(info.version)
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

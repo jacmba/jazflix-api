@@ -7,6 +7,7 @@ import { SectionsModule } from './sections/sections.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenValidatorModule } from './token-validator/token-validator.module';
 import Section from './model/entity/section.entity';
+import User from './model/entity/user.entity';
 
 @Module({
   imports: [
@@ -17,11 +18,11 @@ import Section from './model/entity/section.entity';
       port: DbConfig.PORT,
       database: DbConfig.DB,
       synchronize: DbConfig.SYNC,
-      entities: [Movie, Section],
+      entities: [Movie, Section, User],
     }),
     SectionsModule,
-    AuthModule,
     TokenValidatorModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
