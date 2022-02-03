@@ -2,6 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import axios from 'axios';
 import * as jwt from 'jsonwebtoken';
 import AuthConfig from '../config/auth.config';
+import TokenPayloadDto from '../model/dto/tokenPayload.dto';
 
 @Injectable()
 export class TokenValidatorService implements OnModuleInit {
@@ -12,7 +13,7 @@ export class TokenValidatorService implements OnModuleInit {
     this.certs = result.data;
   }
 
-  validate(token: string): boolean {
+  validate(token: string): string | boolean {
     const decoded = jwt.decode(token, { complete: true });
     if (decoded.header.alg != 'RS256') {
       return false;
@@ -22,9 +23,23 @@ export class TokenValidatorService implements OnModuleInit {
       return false;
     }
     try {
-      const valid = jwt.verify(token, secret, { algorithms: ['RS256'] });
+      const payload = jwt.verify(token, secret, {
+        algorithms: ['RS256'],
+      }) as TokenPayloadDto;
 
-      return !!valid;
+      if (!payload || payload.aud !== AuthConfig.CLIENT_ID) {
+        return false;
+      }
+
+      if (!payload.email || payload.email.length === 0) {
+        return false;
+      }
+
+      if (!payload.email_verified) {
+        return false;
+      }
+
+      return payload.email;
     } catch (e) {
       return false;
     }
