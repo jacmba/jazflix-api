@@ -43,11 +43,6 @@ jobs:
           prerelease: false
           body: ${{ steps.create_changelog.outputs.changelog }}
 
-      - name: Change version
-        uses: reedyuk/npm-version@1.1.1
-        with:
-          version: v${{ needs.get_version.outputs.version }}
-
   build:
     name: Build image and push to Docker HUB
     runs-on: ${{ matrix.os }}
