@@ -1,11 +1,21 @@
-import { Controller, Get, Headers, Param, Res } from '@nestjs/common';
-import { ApiOkResponse } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Headers,
+  Param,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 
 import MovieDto from '../model/dto/movie.dto';
 import { MoviesService } from './movies.service';
+import { AuthGuard } from '../auth/auth-guard';
 
 @Controller('movies')
+@UseGuards(AuthGuard)
+@ApiBearerAuth()
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 

@@ -2,6 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesController } from './movies.controller';
 import { MoviesService } from './movies.service';
 import MovieDto from '../model/dto/movie.dto';
+import { AuthGuard } from '../auth/auth-guard';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import User from '../model/entity/user.entity';
+import { TokenValidatorService } from '../token-validator/token-validator.service';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
@@ -20,6 +24,10 @@ describe('MoviesController', () => {
     }),
   };
 
+  const mockAuthGuard = {};
+  const mockUserRepo = {};
+  const mockTokenValidator = {};
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MoviesController],
@@ -28,6 +36,18 @@ describe('MoviesController', () => {
         {
           provide: MoviesService,
           useValue: mockMoviesService,
+        },
+        {
+          provide: AuthGuard,
+          useValue: mockAuthGuard,
+        },
+        {
+          provide: getRepositoryToken(User),
+          useValue: mockUserRepo,
+        },
+        {
+          provide: TokenValidatorService,
+          useValue: mockTokenValidator,
         },
       ],
     }).compile();
