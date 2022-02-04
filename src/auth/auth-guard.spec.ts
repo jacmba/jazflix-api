@@ -142,4 +142,55 @@ describe('AuthGuard', () => {
     const canDo = await provider.canActivate(context);
     expect(canDo).toBeFalsy();
   });
+
+  it('Should allow token provied by query params', async () => {
+    const context: ExecutionContext = {
+      getClass: jest.fn(),
+      getArgByIndex: jest.fn(),
+      getArgs: jest.fn(),
+      getHandler: jest.fn(),
+      getType: jest.fn(),
+      switchToRpc: jest.fn(),
+      switchToWs: jest.fn(),
+      switchToHttp: jest.fn().mockReturnValue({
+        getRequest: jest.fn().mockReturnValue({
+          query: {
+            token: 'eythisIsAMockToken',
+          },
+          headers: {},
+        }),
+      }),
+    };
+
+    validatorMock.validate.mockReturnValue('jdoe');
+    mockRepo.findOne.mockResolvedValue({
+      id: 'myId',
+      name: 'jdoe',
+      allowed: true,
+    });
+
+    const canDo = await provider.canActivate(context);
+    expect(canDo).toBeTruthy();
+  });
+
+  it('Should allow reject request with missing token', async () => {
+    const context: ExecutionContext = {
+      getClass: jest.fn(),
+      getArgByIndex: jest.fn(),
+      getArgs: jest.fn(),
+      getHandler: jest.fn(),
+      getType: jest.fn(),
+      switchToRpc: jest.fn(),
+      switchToWs: jest.fn(),
+      switchToHttp: jest.fn().mockReturnValue({
+        getRequest: jest.fn().mockReturnValue({
+          query: {},
+          headers: {},
+        }),
+      }),
+    };
+
+    const canDo = await provider.canActivate(context);
+    expect(canDo).toBeFalsy();
+  });
 });

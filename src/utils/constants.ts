@@ -5,5 +5,6 @@ export default class Constants {
     REQUEST_ACCESS_TYPE: 'offline',
     TOKEN_GRANT_TYPE: 'authorization_code',
     REFRESH_GRANT_TYPE: 'refresh_token',
+    REQUEST_PROMPT: 'consent',
   });
 }

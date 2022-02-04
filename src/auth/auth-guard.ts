@@ -13,10 +13,6 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
-    if (!req || !req.headers) {
-      console.error('Missing headers on request');
-      return false;
-    }
 
     let token: string;
     if (req.headers.authorization) {
@@ -29,8 +25,11 @@ export class AuthGuard implements CanActivate {
       [, token] = bearerReg.exec(req.headers.authorization);
       console.log('Provided token: ' + token);
     } else {
-      console.error('Missing auth header');
-      return false;
+      token = req.query.token;
+      if (!token) {
+        console.error('Missing auth token');
+        return false;
+      }
     }
 
     const tokenUserName = this.validator.validate(token);
