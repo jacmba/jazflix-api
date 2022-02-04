@@ -4,4 +4,5 @@ export default class AuthRequestDto {
   client_id: string;
   redirect_uri: string;
   access_type: string;
+  prompt: string;
 }

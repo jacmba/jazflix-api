@@ -1,6 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { AuthGuard } from './auth-guard';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import User from '../model/entity/user.entity';
+import { TokenValidatorService } from '../token-validator/token-validator.service';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -9,8 +13,16 @@ describe('AuthController', () => {
     requestAuth: jest
       .fn()
       .mockImplementation(() => 'http://auth.com?client_id=123'),
-    getToken: jest.fn().mockResolvedValue('myMockToken'),
+    getToken: jest.fn().mockResolvedValue({
+      token: 'myMockToken',
+      refresh_token: 'myMockRefreshToken',
+    }),
+    refreshToken: jest.fn().mockResolvedValue('eyFreshToken'),
   };
+
+  const mockAuthGuard = {};
+  const mockUserRepo = {};
+  const mockTokenValidator = {};
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -19,6 +31,18 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: mockService,
+        },
+        {
+          provide: AuthGuard,
+          useValue: mockAuthGuard,
+        },
+        {
+          provide: getRepositoryToken(User),
+          useValue: mockUserRepo,
+        },
+        {
+          provide: TokenValidatorService,
+          useValue: mockTokenValidator,
         },
       ],
     }).compile();
@@ -37,6 +61,12 @@ describe('AuthController', () => {
 
   it('Should return a mock jwt', async () => {
     const token = await controller.getAuthToken('myMockCode');
-    expect(token).toBe('myMockToken');
+    expect(token.token).toBe('myMockToken');
+    expect(token.refresh_token).toBe('myMockRefreshToken');
+  });
+
+  it('Should return a refresh token', async () => {
+    const token = await controller.getRefreshToken('myCode');
+    expect(token).toBe('eyFreshToken');
   });
 });
