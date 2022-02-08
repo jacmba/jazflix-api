@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { stringify } from 'qs';
 
@@ -7,9 +8,17 @@ import AuthRequestDto from '../model/dto/authRequest.dto';
 import TokenRequestDto from '../model/dto/tokenRequest.dto';
 import TokenResponseDto from '../model/dto/tokenResponse.dto';
 import Constants from '../utils/constants';
+import User from '../model/entity/user.entity';
+import { Repository } from 'typeorm';
+import { TokenValidatorService } from '../token-validator/token-validator.service';
 
 @Injectable()
 export class AuthService {
+  constructor(
+    @InjectRepository(User) private readonly userRepo: Repository<User>,
+    private readonly validatorService: TokenValidatorService,
+  ) {}
+
   async refreshToken(code: string): Promise<string> {
     const params: TokenRequestDto = {
       client_id: AuthConfig.CLIENT_ID,
@@ -33,6 +42,26 @@ export class AuthService {
     };
 
     const result = await axios.post(AuthConfig.TOKEN_URI, null, { params });
+
+    const username = this.validatorService.validate(result.data.id_token);
+    if (!username) {
+      throw new HttpException('Invalid ID token', HttpStatus.UNAUTHORIZED);
+    }
+
+    const user = await this.userRepo.findOne({ name: username as string });
+    if (!user) {
+      throw new HttpException(
+        `User ${username} not found`,
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    if (!user.allowed) {
+      throw new HttpException(
+        `User ${username} not allowed`,
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
     return {
       token: result.data.id_token,
       refresh_token: result.data.refresh_token,
