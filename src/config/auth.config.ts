@@ -16,4 +16,11 @@ export default class AuthConfig {
 
   public static readonly CERTS_URI =
     process.env.AUTH_CERTS_URI || 'https://www.googleapis.com/oauth2/v1/certs';
+
+  public static readonly SIGN_SECRET =
+    process.env.AUTH_SIGN_SECRET || 'simple-secret-change-it';
+
+  public static readonly SIGN_SALT_ROUNDS = Number(
+    process.env.AUTH_SIGN_SALT_ROUNDS || 12,
+  );
 }

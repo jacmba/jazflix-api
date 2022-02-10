@@ -6,6 +6,7 @@ import { Movie } from './model/entity/movie.entity';
 import { SectionsModule } from './sections/sections.module';
 import { AuthModule } from './auth/auth.module';
 import { TokenValidatorModule } from './token-validator/token-validator.module';
+import { VideoTokenModule } from './video-token/video-token.module';
 import Section from './model/entity/section.entity';
 import User from './model/entity/user.entity';
 
@@ -23,6 +24,7 @@ import User from './model/entity/user.entity';
     SectionsModule,
     TokenValidatorModule,
     AuthModule,
+    VideoTokenModule,
   ],
 })
 export class AppModule {}
