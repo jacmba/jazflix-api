@@ -16,8 +16,8 @@ export class VideoTokenSigner {
     const payload: VideoTokenDto = {
       user: obj.email,
       hash,
-      iat: Date.now() / 1000,
-      exp: Date.now() / 1000 + 60 * 60 * 6,
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 6,
     };
 
     const token = jwt.sign(payload, secret);

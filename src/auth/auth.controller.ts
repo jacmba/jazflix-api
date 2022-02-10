@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, Request } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import TokenResponseDto from '../model/dto/tokenResponse.dto';
 import { AuthService } from './auth.service';
@@ -26,5 +26,16 @@ export class AuthController {
   @ApiBearerAuth()
   async getRefreshToken(@Query('code') code: string): Promise<string> {
     return this.authService.refreshToken(code);
+  }
+
+  @Get('/video')
+  @ApiOkResponse()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  getVideoToken(@Request() req: Request): string {
+    const authHeader = req.headers['authorization'];
+    const [, idToken] = authHeader.split(' ');
+    const token = this.authService.getVideoToken(idToken);
+    return token;
   }
 }

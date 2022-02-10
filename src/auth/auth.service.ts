@@ -11,12 +11,14 @@ import Constants from '../utils/constants';
 import User from '../model/entity/user.entity';
 import { Repository } from 'typeorm';
 import { TokenValidatorService } from '../token-validator/token-validator.service';
+import { VideoTokenSigner } from '../video-token/video-token-signer';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     private readonly validatorService: TokenValidatorService,
+    private readonly videoTokenSignService: VideoTokenSigner,
   ) {}
 
   async refreshToken(code: string): Promise<string> {
@@ -81,5 +83,10 @@ export class AuthService {
       '%2B',
       '+',
     );
+  }
+
+  getVideoToken(idToken: string): string {
+    const token = this.videoTokenSignService.getToken(idToken);
+    return token;
   }
 }

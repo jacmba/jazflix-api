@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import User from '../model/entity/user.entity';
 import { TokenValidatorService } from '../token-validator/token-validator.service';
+import { Request } from '@nestjs/common';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -18,6 +19,7 @@ describe('AuthController', () => {
       refresh_token: 'myMockRefreshToken',
     }),
     refreshToken: jest.fn().mockResolvedValue('eyFreshToken'),
+    getVideoToken: jest.fn().mockReturnValue('eyMockVideoToken'),
   };
 
   const mockAuthGuard = {};
@@ -68,5 +70,16 @@ describe('AuthController', () => {
   it('Should return a refresh token', async () => {
     const token = await controller.getRefreshToken('myCode');
     expect(token).toBe('eyFreshToken');
+  });
+
+  it('Should get a video token', () => {
+    const req = {
+      headers: {
+        authorization: 'Bearer eyMockIDToken',
+      },
+    };
+    const token = controller.getVideoToken(req as any);
+    expect(mockService.getVideoToken).toHaveBeenCalledWith('eyMockIDToken');
+    expect(token).toBe('eyMockVideoToken');
   });
 });

@@ -6,10 +6,23 @@ import { TokenValidatorService } from '../token-validator/token-validator.servic
 import { TokenValidatorModule } from '../token-validator/token-validator.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import User from '../model/entity/user.entity';
+import { VideoTokenModule } from '../video-token/video-token.module';
+import { VideoTokenHasher } from '../video-token/video-token-hasher';
+import { VideoTokenSigner } from '../video-token/video-token-signer';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), TokenValidatorModule],
-  providers: [AuthService, AuthGuard, TokenValidatorService],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    TokenValidatorModule,
+    VideoTokenModule,
+  ],
+  providers: [
+    AuthService,
+    AuthGuard,
+    TokenValidatorService,
+    VideoTokenHasher,
+    VideoTokenSigner,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

@@ -5,6 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import User from '../model/entity/user.entity';
 import { HttpException } from '@nestjs/common';
 import { TokenValidatorService } from '../token-validator/token-validator.service';
+import { VideoTokenSigner } from '../video-token/video-token-signer';
 
 jest.mock('axios');
 
@@ -19,6 +20,10 @@ describe('AuthService', () => {
     validate: jest.fn(),
   };
 
+  const mockVideoSigner = {
+    getToken: jest.fn().mockReturnValue('eyMockVideoToken'),
+  };
+
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -30,6 +35,10 @@ describe('AuthService', () => {
         {
           provide: TokenValidatorService,
           useValue: mockValidator,
+        },
+        {
+          provide: VideoTokenSigner,
+          useValue: mockVideoSigner,
         },
       ],
     }).compile();
@@ -124,5 +133,11 @@ describe('AuthService', () => {
       expect(err.message).toBe('User jdoe not allowed');
       expect(err.getStatus()).toBe(401);
     }
+  });
+
+  it('Should get a video token', () => {
+    const token = service.getVideoToken('eyMockIDToken');
+    expect(mockVideoSigner.getToken).toHaveBeenCalledWith('eyMockIDToken');
+    expect(token).toBe('eyMockVideoToken');
   });
 });
