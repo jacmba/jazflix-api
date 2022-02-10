@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { VideoTokenHasher } from './video-token-hasher';
-import HashableObjectDto from '../../dist/src/model/dto/hashableObject.dto';
+import HashableObjectDto from '../model/dto/hashableObject.dto';
 import * as bcrypt from 'bcrypt';
 
 describe('VideoTokenHasher', () => {
