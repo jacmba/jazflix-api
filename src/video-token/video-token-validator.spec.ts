@@ -47,7 +47,7 @@ describe('VideoTokenValidator', () => {
 
     const isValid = provider.validate(token);
     expect(mockHasher.getObject).toHaveBeenCalledWith('eyMockToken');
-    expect(isValid).toBeTruthy();
+    expect(isValid).toBe('jdoe@gmail.com');
   });
 
   it('Validation should fail with empty token', () => {

@@ -9,7 +9,7 @@ import AuthConfig from '../config/auth.config';
 export class VideoTokenValidator {
   constructor(private readonly hasher: VideoTokenHasher) {}
 
-  validate(token: string): boolean {
+  validate(token: string): string | boolean {
     if (!token || token.length === 0) {
       console.error('Empty token provided');
       return false;
@@ -53,6 +53,6 @@ export class VideoTokenValidator {
       return false;
     }
 
-    return true;
+    return decoded.user;
   }
 }
