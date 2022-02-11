@@ -6,6 +6,8 @@ import { AuthGuard } from '../auth/auth-guard';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import User from '../model/entity/user.entity';
 import { TokenValidatorService } from '../token-validator/token-validator.service';
+import { VideoAuthGuard } from '../auth/video-auth-guard';
+import { VideoTokenValidator } from '../video-token/video-token-validator';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
@@ -27,6 +29,8 @@ describe('MoviesController', () => {
   const mockAuthGuard = {};
   const mockUserRepo = {};
   const mockTokenValidator = {};
+  const mockVideoGuard = {};
+  const mockVideoTokenValidator = {};
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -48,6 +52,14 @@ describe('MoviesController', () => {
         {
           provide: TokenValidatorService,
           useValue: mockTokenValidator,
+        },
+        {
+          provide: VideoAuthGuard,
+          useValue: mockVideoGuard,
+        },
+        {
+          provide: VideoTokenValidator,
+          useValue: mockVideoTokenValidator,
         },
       ],
     }).compile();
