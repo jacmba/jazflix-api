@@ -143,7 +143,7 @@ describe('AuthGuard', () => {
     expect(canDo).toBeFalsy();
   });
 
-  it('Should allow token provied by query params', async () => {
+  it('Should not allow token provied by query params', async () => {
     const context: ExecutionContext = {
       getClass: jest.fn(),
       getArgByIndex: jest.fn(),
@@ -170,7 +170,7 @@ describe('AuthGuard', () => {
     });
 
     const canDo = await provider.canActivate(context);
-    expect(canDo).toBeTruthy();
+    expect(canDo).toBeFalsy();
   });
 
   it('Should allow reject request with missing token', async () => {

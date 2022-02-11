@@ -25,11 +25,8 @@ export class AuthGuard implements CanActivate {
       [, token] = bearerReg.exec(req.headers.authorization);
       console.log('Provided token: ' + token);
     } else {
-      token = req.query.token;
-      if (!token) {
-        console.error('Missing auth token');
-        return false;
-      }
+      console.error('Missing auth token');
+      return false;
     }
 
     const tokenUserName = this.validator.validate(token);
