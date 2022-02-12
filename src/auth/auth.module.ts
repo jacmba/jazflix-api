@@ -9,6 +9,8 @@ import User from '../model/entity/user.entity';
 import { VideoTokenModule } from '../video-token/video-token.module';
 import { VideoTokenHasher } from '../video-token/video-token-hasher';
 import { VideoTokenSigner } from '../video-token/video-token-signer';
+import { VideoTokenValidator } from '../video-token/video-token-validator';
+import { VideoAuthGuard } from './video-auth-guard';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { VideoTokenSigner } from '../video-token/video-token-signer';
     TokenValidatorService,
     VideoTokenHasher,
     VideoTokenSigner,
+    VideoTokenValidator,
+    VideoAuthGuard,
   ],
   controllers: [AuthController],
 })

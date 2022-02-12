@@ -12,21 +12,23 @@ import { Response } from 'express';
 import MovieDto from '../model/dto/movie.dto';
 import { MoviesService } from './movies.service';
 import { AuthGuard } from '../auth/auth-guard';
+import { VideoAuthGuard } from '../auth/video-auth-guard';
 
 @Controller('movies')
-@UseGuards(AuthGuard)
-@ApiBearerAuth()
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Get()
   @ApiOkResponse()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   getMovies(): Promise<MovieDto[]> {
     return this.moviesService.find();
   }
 
   @Get(':id')
   @ApiOkResponse()
+  @UseGuards(VideoAuthGuard)
   async getMovieVideo(
     @Param('id') id: string,
     @Res() res: Response,
