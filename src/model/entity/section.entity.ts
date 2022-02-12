@@ -13,4 +13,7 @@ export default class Section {
 
   @Column()
   to: string;
+
+  @Column()
+  order?: number;
 }

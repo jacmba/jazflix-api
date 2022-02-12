@@ -13,12 +13,14 @@ export class SectionsService {
   async find(): Promise<SectionDto[]> {
     const sections = await this.repo.find();
 
-    return sections.map(
-      (s: Section): SectionDto => ({
-        title: s.title,
-        icon: s.icon,
-        to: s.to,
-      }),
-    );
+    return sections
+      .sort((a, b) => a.order - b.order)
+      .map(
+        (s: Section): SectionDto => ({
+          title: s.title,
+          icon: s.icon,
+          to: s.to,
+        }),
+      );
   }
 }

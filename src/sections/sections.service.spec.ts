@@ -45,4 +45,36 @@ describe('SectionsService', () => {
     expect(sections[0].to).toBe('test');
     expect(sections[0].icon).toBe('test-icon');
   });
+
+  it('Should return sections list sorted by order field', async () => {
+    mockRepo.find.mockReturnValueOnce([
+      {
+        id: '1',
+        icon: 'test-icon',
+        title: 'Test section 1',
+        to: 'test',
+        order: 2,
+      },
+      {
+        id: '2',
+        icon: 'test-icon',
+        title: 'Test section 2',
+        to: 'test',
+        order: 0,
+      },
+      {
+        id: '3',
+        icon: 'test-icon',
+        title: 'Test section 3',
+        to: 'test',
+        order: 1,
+      },
+    ]);
+
+    const sections = await service.find();
+    expect(sections.length).toBe(3);
+    expect(sections[0].title).toBe('Test section 2');
+    expect(sections[1].title).toBe('Test section 3');
+    expect(sections[2].title).toBe('Test section 1');
+  });
 });
