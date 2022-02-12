@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { VideoAuthGuard } from './video-auth-guard';
 import { VideoTokenValidator } from '../video-token/video-token-validator';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import User from '../../dist/src/model/entity/user.entity';
+import User from '../model/entity/user.entity';
 import { ExecutionContext } from '@nestjs/common';
 
 describe('VideoAuthGuard', () => {
