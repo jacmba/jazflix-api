@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+
+import User from '../model/entity/user.entity';
+import { TokenValidatorService } from '../token-validator/token-validator.service';
 import { AuthGuard } from './auth-guard';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import User from '../model/entity/user.entity';
-import { TokenValidatorService } from '../token-validator/token-validator.service';
-import { Request } from '@nestjs/common';
 
 describe('AuthController', () => {
   let controller: AuthController;

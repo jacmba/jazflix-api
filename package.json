@@ -1,8 +1,8 @@
 {
   "name": "jazflix-api",
   "version": "1.2.1",
-  "description": "",
-  "author": "",
+  "description": "API service for Jazflix video streaming platform",
+  "author": "Jacinto Mba Cantero",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

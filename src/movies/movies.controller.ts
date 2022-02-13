@@ -6,7 +6,18 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiExtraModels,
+  ApiHeader,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { Response } from 'express';
 
 import MovieDto from '../model/dto/movie.dto';
@@ -15,11 +26,20 @@ import { AuthGuard } from '../auth/auth-guard';
 import { VideoAuthGuard } from '../auth/video-auth-guard';
 
 @Controller('movies')
+@ApiExtraModels(MovieDto)
+@ApiTags('Movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Get()
-  @ApiOkResponse()
+  @ApiOperation({ summary: 'Movies list endpoint' })
+  @ApiOkResponse({
+    description: 'Get list of available movies',
+    schema: {
+      type: 'array',
+      items: { $ref: getSchemaPath(MovieDto) },
+    },
+  })
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   getMovies(): Promise<MovieDto[]> {
@@ -27,8 +47,31 @@ export class MoviesController {
   }
 
   @Get(':id')
-  @ApiOkResponse()
+  @ApiOperation({
+    summary: 'Movie streaming endpoint',
+    description:
+      'Binary video streaming, using special extended duration signed token.',
+  })
+  @ApiOkResponse({ description: 'Full set of movie file bytes' })
+  @ApiResponse({ status: 206, description: 'Partial chunk of bytes' })
   @UseGuards(VideoAuthGuard)
+  @ApiQuery({
+    name: 'token',
+    description: 'Special video token',
+    example:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0.Gfx6VO9tcxwk6xqx9yYzSfebfeakZp5JYIgP_edcw_A',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Movie unique ID',
+    example: 'deieruiuoxcit1245430dfsdhf',
+  })
+  @ApiHeader({
+    name: 'Range',
+    description: 'Stream chunk bytes range',
+    required: false,
+    example: '0-100',
+  })
   async getMovieVideo(
     @Param('id') id: string,
     @Res() res: Response,

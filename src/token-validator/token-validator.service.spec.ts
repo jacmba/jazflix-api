@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import axios from 'axios';
-import exp from 'constants';
 import { TokenValidatorService } from './token-validator.service';
 
 jest.mock('axios');

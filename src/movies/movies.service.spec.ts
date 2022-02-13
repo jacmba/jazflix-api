@@ -1,10 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { identity } from 'rxjs';
 import { Movie } from '../model/entity/movie.entity';
-import { MoviesService } from './movies.service';
-import VideoDto from '../model/dto/video.dto';
 import VideoLoader from '../utils/videoLoader';
+import { MoviesService } from './movies.service';
 
 describe('MoviesService', () => {
   let service: MoviesService;
@@ -34,12 +32,10 @@ describe('MoviesService', () => {
   };
 
   const mockVideoLoader = {
-    load: jest.fn().mockImplementation(
-      (name: string): VideoDto => ({
-        size: 1000,
-        stream: null,
-      }),
-    ),
+    load: jest.fn().mockReturnValue({
+      size: 1000,
+      stream: null,
+    }),
   };
 
   beforeEach(async () => {

@@ -1,18 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export default class MovieDto {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Unique identifier for movie object',
+    example: 'riopufi3o54ih3ytihfdhsr',
+  })
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Movie title',
+    example: 'When the dog raises the nose',
+  })
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Brief description of the movie',
+    example: 'An amazing movie with cute characters',
+  })
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Movie cover image url',
+    example: 'http://example.com/awesomemovie.jpg',
+  })
   image: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Optional comma-separated extra tags',
+    example: 'drama,series',
+  })
   extra?: string;
 }

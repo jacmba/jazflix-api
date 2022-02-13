@@ -11,6 +11,7 @@ async function bootstrap() {
     .setTitle('Jazflix API')
     .setDescription(info.description)
     .setVersion(info.version)
+    .setContact(info.author, 'http://www.jazbelt.net/', 'jacmba [at] gmail')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
