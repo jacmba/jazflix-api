@@ -17,15 +17,17 @@ export class MoviesService {
   async find(): Promise<MovieDto[]> {
     const movies = await this.moviesRepository.find();
 
-    return movies.map(
-      (m: Movie): MovieDto => ({
-        id: m.id,
-        title: m.title,
-        description: m.description,
-        image: m.image,
-        extra: m.extra,
-      }),
-    );
+    return movies
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .map(
+        (m: Movie): MovieDto => ({
+          id: m.id,
+          title: m.title,
+          description: m.description,
+          image: m.image,
+          extra: m.extra,
+        }),
+      );
   }
 
   async findOne(id: string, start: string, end: string): Promise<VideoDto> {

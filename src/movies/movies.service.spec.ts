@@ -82,4 +82,36 @@ describe('MoviesService', () => {
     expect(video.size).toBe(1000);
     expect(video.stream).toBeNull();
   });
+
+  it('Should get a list of movies alphabetically sorted', async () => {
+    mockMoviesRepo.find.mockResolvedValueOnce([
+      {
+        id: '1',
+        title: 'Zombie movie',
+        description: 'Foo bar',
+        image: 'foo.png',
+        video: 'foo.mpg',
+      },
+      {
+        id: '2',
+        title: 'A great movie',
+        description: 'Foo bar',
+        image: 'foo.png',
+        video: 'foo.mpg',
+      },
+      {
+        id: '3',
+        title: 'Just another movie',
+        description: 'Foo bar',
+        image: 'foo.png',
+        video: 'foo.mpg',
+      },
+    ]);
+
+    const movies = await service.find();
+    expect(movies.length).toBe(3);
+    expect(movies[0].id).toBe('2');
+    expect(movies[1].id).toBe('3');
+    expect(movies[2].id).toBe('1');
+  });
 });
