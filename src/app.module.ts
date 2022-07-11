@@ -9,6 +9,7 @@ import { TokenValidatorModule } from './token-validator/token-validator.module';
 import { VideoTokenModule } from './video-token/video-token.module';
 import Section from './model/entity/section.entity';
 import User from './model/entity/user.entity';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import User from './model/entity/user.entity';
     TokenValidatorModule,
     AuthModule,
     VideoTokenModule,
+    ScheduleModule.forRoot(),
   ],
 })
 export class AppModule {}
