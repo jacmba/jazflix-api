@@ -8,6 +8,7 @@ import User from '../model/entity/user.entity';
 import { TokenValidatorService } from '../token-validator/token-validator.service';
 import { VideoAuthGuard } from '../auth/video-auth-guard';
 import { VideoTokenValidator } from '../video-token/video-token-validator';
+import { IpBypasserService } from '../auth/ip-bypasser/ip-bypasser.service';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
@@ -31,6 +32,7 @@ describe('MoviesController', () => {
   const mockTokenValidator = {};
   const mockVideoGuard = {};
   const mockVideoTokenValidator = {};
+  const mockBypass = {};
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -60,6 +62,10 @@ describe('MoviesController', () => {
         {
           provide: VideoTokenValidator,
           useValue: mockVideoTokenValidator,
+        },
+        {
+          provide: IpBypasserService,
+          useValue: mockBypass,
         },
       ],
     }).compile();

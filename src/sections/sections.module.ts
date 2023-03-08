@@ -8,6 +8,8 @@ import { AuthGuard } from '../auth/auth-guard';
 import { TokenValidatorModule } from '../token-validator/token-validator.module';
 import { TokenValidatorService } from '../token-validator/token-validator.service';
 import User from '../model/entity/user.entity';
+import { IpBypasserService } from '../auth/ip-bypasser/ip-bypasser.service';
+import AuthConfig from '../config/auth.config';
 
 @Module({
   imports: [
@@ -15,7 +17,16 @@ import User from '../model/entity/user.entity';
     AuthModule,
     TokenValidatorModule,
   ],
-  providers: [SectionsService, AuthGuard, TokenValidatorService],
+  providers: [
+    SectionsService,
+    AuthGuard,
+    TokenValidatorService,
+    IpBypasserService,
+    {
+      provide: 'ALLOWED_IPS_LIST',
+      useValue: AuthConfig.ALLOWED_IPS,
+    },
+  ],
   controllers: [SectionsController],
 })
 export class SectionsModule {}

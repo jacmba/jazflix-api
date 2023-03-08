@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, Request, Ip } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOkResponse,
@@ -11,12 +11,16 @@ import {
 import TokenResponseDto from '../model/dto/tokenResponse.dto';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth-guard';
+import { IpBypasserService } from './ip-bypasser/ip-bypasser.service';
 
 @Controller('auth')
 @ApiTags('Auth')
 @ApiExtraModels(TokenResponseDto)
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private readonly bypassService: IpBypasserService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Oauth2 initialization endpoint' })
@@ -91,5 +95,20 @@ export class AuthController {
     const [, idToken] = authHeader.split(' ');
     const token = this.authService.getVideoToken(idToken);
     return token;
+  }
+
+  @Get('/bypass')
+  @ApiOperation({
+    summary: 'Check if auth can be bypassed by IP',
+  })
+  @ApiOkResponse({
+    description: 'Can the auth be bypassed with IP?',
+    schema: {
+      type: 'boolean',
+      example: true,
+    },
+  })
+  getBypass(@Ip() ip: string): boolean {
+    return this.bypassService.bypass(ip);
   }
 }

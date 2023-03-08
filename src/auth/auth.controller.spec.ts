@@ -6,6 +6,7 @@ import { TokenValidatorService } from '../token-validator/token-validator.servic
 import { AuthGuard } from './auth-guard';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { IpBypasserService } from './ip-bypasser/ip-bypasser.service';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -25,6 +26,9 @@ describe('AuthController', () => {
   const mockAuthGuard = {};
   const mockUserRepo = {};
   const mockTokenValidator = {};
+  const mockBypass = {
+    bypass: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -45,6 +49,10 @@ describe('AuthController', () => {
         {
           provide: TokenValidatorService,
           useValue: mockTokenValidator,
+        },
+        {
+          provide: IpBypasserService,
+          useValue: mockBypass,
         },
       ],
     }).compile();
@@ -81,5 +89,23 @@ describe('AuthController', () => {
     const token = controller.getVideoToken(req as any);
     expect(mockService.getVideoToken).toHaveBeenCalledWith('eyMockIDToken');
     expect(token).toBe('eyMockVideoToken');
+  });
+
+  it('Should bypass given IP', () => {
+    mockBypass.bypass.mockReturnValue(true);
+
+    const bypass = controller.getBypass('1.1.1.1');
+
+    expect(mockBypass.bypass).toHaveBeenCalledWith('1.1.1.1');
+    expect(bypass).toBeTruthy();
+  });
+
+  it('Should not bypass given IP', () => {
+    mockBypass.bypass.mockReturnValue(false);
+
+    const bypass = controller.getBypass('3.3.3.3');
+
+    expect(mockBypass.bypass).toHaveBeenCalledWith('3.3.3.3');
+    expect(bypass).toBeFalsy();
   });
 });

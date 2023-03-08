@@ -6,6 +6,7 @@ import { AuthGuard } from '../auth/auth-guard';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import User from '../model/entity/user.entity';
 import { TokenValidatorService } from '../token-validator/token-validator.service';
+import { IpBypasserService } from '../auth/ip-bypasser/ip-bypasser.service';
 
 describe('SectionsController', () => {
   let controller: SectionsController;
@@ -29,6 +30,8 @@ describe('SectionsController', () => {
 
   const mockTokenValidator = {};
 
+  const mockBypass = {};
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SectionsController],
@@ -48,6 +51,10 @@ describe('SectionsController', () => {
         {
           provide: TokenValidatorService,
           useValue: mockTokenValidator,
+        },
+        {
+          provide: IpBypasserService,
+          useValue: mockBypass,
         },
       ],
     }).compile();

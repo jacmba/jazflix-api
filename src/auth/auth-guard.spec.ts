@@ -4,6 +4,7 @@ import { TokenValidatorService } from '../token-validator/token-validator.servic
 import { getRepositoryToken } from '@nestjs/typeorm';
 import User from '../model/entity/user.entity';
 import { ExecutionContext } from '@nestjs/common';
+import { IpBypasserService } from './ip-bypasser/ip-bypasser.service';
 
 describe('AuthGuard', () => {
   let provider: AuthGuard;
@@ -14,6 +15,10 @@ describe('AuthGuard', () => {
 
   const mockRepo = {
     findOne: jest.fn(),
+  };
+
+  const bypassMock = {
+    bypass: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -27,6 +32,10 @@ describe('AuthGuard', () => {
         {
           provide: getRepositoryToken(User),
           useValue: mockRepo,
+        },
+        {
+          provide: IpBypasserService,
+          useValue: bypassMock,
         },
       ],
     }).compile();
@@ -189,6 +198,54 @@ describe('AuthGuard', () => {
         }),
       }),
     };
+
+    const canDo = await provider.canActivate(context);
+    expect(canDo).toBeFalsy();
+  });
+
+  it('Should allow a bypassed IP', async () => {
+    const context: ExecutionContext = {
+      getClass: jest.fn(),
+      getArgByIndex: jest.fn(),
+      getArgs: jest.fn(),
+      getHandler: jest.fn(),
+      getType: jest.fn(),
+      switchToRpc: jest.fn(),
+      switchToWs: jest.fn(),
+      switchToHttp: jest.fn().mockReturnValue({
+        getRequest: jest.fn().mockReturnValue({
+          query: {},
+          headers: {},
+          ip: '1.1.1.1',
+        }),
+      }),
+    };
+
+    bypassMock.bypass.mockReturnValue(true);
+
+    const canDo = await provider.canActivate(context);
+    expect(canDo).toBeTruthy();
+  });
+
+  it('Should fail with a non bypassed IP', async () => {
+    const context: ExecutionContext = {
+      getClass: jest.fn(),
+      getArgByIndex: jest.fn(),
+      getArgs: jest.fn(),
+      getHandler: jest.fn(),
+      getType: jest.fn(),
+      switchToRpc: jest.fn(),
+      switchToWs: jest.fn(),
+      switchToHttp: jest.fn().mockReturnValue({
+        getRequest: jest.fn().mockReturnValue({
+          query: {},
+          headers: {},
+          ip: '1.1.1.1',
+        }),
+      }),
+    };
+
+    bypassMock.bypass.mockReturnValue(false);
 
     const canDo = await provider.canActivate(context);
     expect(canDo).toBeFalsy();

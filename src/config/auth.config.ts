@@ -23,4 +23,8 @@ export default class AuthConfig {
   public static readonly SIGN_SALT_ROUNDS = Number(
     process.env.AUTH_SIGN_SALT_ROUNDS || 12,
   );
+
+  public static readonly ALLOWED_IPS = (
+    process.env.AUTH_ALLOWED_IPS || ''
+  ).split(',');
 }

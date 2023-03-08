@@ -4,6 +4,7 @@ import { VideoTokenValidator } from '../video-token/video-token-validator';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import User from '../model/entity/user.entity';
 import { ExecutionContext } from '@nestjs/common';
+import { IpBypasserService } from './ip-bypasser/ip-bypasser.service';
 
 describe('VideoAuthGuard', () => {
   let provider: VideoAuthGuard;
@@ -14,6 +15,10 @@ describe('VideoAuthGuard', () => {
 
   const mockRepo = {
     findOne: jest.fn(),
+  };
+
+  const mockBypass = {
+    bypass: jest.fn(),
   };
 
   const context: ExecutionContext = {
@@ -29,6 +34,7 @@ describe('VideoAuthGuard', () => {
         query: {
           token: 'mockToken',
         },
+        ip: '1.2.3.4',
       }),
     }),
   };
@@ -45,6 +51,10 @@ describe('VideoAuthGuard', () => {
         {
           provide: getRepositoryToken(User),
           useValue: mockRepo,
+        },
+        {
+          provide: IpBypasserService,
+          useValue: mockBypass,
         },
       ],
     }).compile();
@@ -99,5 +109,14 @@ describe('VideoAuthGuard', () => {
     expect(mockValidator.validate).toHaveBeenCalledWith('mockToken');
     expect(mockRepo.findOne).toHaveBeenCalledWith({ name: 'jdoe' });
     expect(canActivate).toBeFalsy();
+  });
+
+  it('Should validate for an allowed ip', async () => {
+    mockBypass.bypass.mockReturnValue(true);
+
+    const canActivate = await provider.canActivate(context);
+    expect(mockBypass.bypass).toHaveBeenCalledWith('1.2.3.4');
+    expect(mockValidator.validate).toHaveBeenCalledTimes(0);
+    expect(canActivate).toBeTruthy();
   });
 });

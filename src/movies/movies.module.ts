@@ -14,6 +14,8 @@ import { MoviesController } from './movies.controller';
 import { MoviesService } from './movies.service';
 import { VideoTokenValidator } from '../video-token/video-token-validator';
 import { VideoTokenHasher } from '../video-token/video-token-hasher';
+import { IpBypasserService } from '../auth/ip-bypasser/ip-bypasser.service';
+import AuthConfig from '../config/auth.config';
 
 @Module({
   imports: [
@@ -31,6 +33,11 @@ import { VideoTokenHasher } from '../video-token/video-token-hasher';
     VideoTokenValidator,
     VideoTokenHasher,
     VideoAuthGuard,
+    IpBypasserService,
+    {
+      provide: 'ALLOWED_IPS_LIST',
+      useValue: AuthConfig.ALLOWED_IPS,
+    },
   ],
 })
 export class MoviesModule {}

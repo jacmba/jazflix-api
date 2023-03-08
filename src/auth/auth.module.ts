@@ -11,6 +11,8 @@ import { VideoTokenHasher } from '../video-token/video-token-hasher';
 import { VideoTokenSigner } from '../video-token/video-token-signer';
 import { VideoTokenValidator } from '../video-token/video-token-validator';
 import { VideoAuthGuard } from './video-auth-guard';
+import { IpBypasserService } from './ip-bypasser/ip-bypasser.service';
+import AuthConfig from '../config/auth.config';
 
 @Module({
   imports: [
@@ -26,6 +28,11 @@ import { VideoAuthGuard } from './video-auth-guard';
     VideoTokenSigner,
     VideoTokenValidator,
     VideoAuthGuard,
+    IpBypasserService,
+    {
+      provide: 'ALLOWED_IPS_LIST',
+      useValue: AuthConfig.ALLOWED_IPS,
+    },
   ],
   controllers: [AuthController],
 })
