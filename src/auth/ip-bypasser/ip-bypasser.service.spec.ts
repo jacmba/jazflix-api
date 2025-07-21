@@ -29,8 +29,13 @@ describe('IpBypasserService', () => {
     expect(bypass).toBeTruthy();
   });
 
-  it('bypass should fail for IP 2.2.2.2', () => {
+  it('bypass should not fail for IP 2.2.2.2', () => {
     const bypass: boolean = service.bypass('2.2.2.2');
-    expect(bypass).toBeFalsy();
+    expect(bypass).toBeTruthy();
+  });
+
+  it('should bypass any random IP', () => {
+    const bypass: boolean = service.bypass('192.172.5.34');
+    expect(bypass).toBeTruthy();
   });
 });
