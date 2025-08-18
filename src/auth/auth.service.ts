@@ -50,7 +50,9 @@ export class AuthService {
       throw new HttpException('Invalid ID token', HttpStatus.UNAUTHORIZED);
     }
 
-    const user = await this.userRepo.findOne({ name: username as string });
+    const user = await this.userRepo.findOne({
+      where: { name: username as string },
+    });
     if (!user) {
       throw new HttpException(
         `User ${username} not found`,

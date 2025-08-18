@@ -1,4 +1,4 @@
-FROM node:14-alpine as builder
+FROM node:22-alpine AS builder
 RUN mkdir /src
 RUN mkdir /static
 WORKDIR /src
@@ -14,6 +14,6 @@ RUN mv node_modules /app/
 WORKDIR /app
 RUN rm -rf /src
 
-ENV STATIC_DIRECTORY /static
+ENV STATIC_DIRECTORY=/static
 
 CMD ["node", "src/main.js"]

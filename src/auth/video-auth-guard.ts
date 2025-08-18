@@ -29,7 +29,9 @@ export class VideoAuthGuard implements CanActivate {
       return false;
     }
 
-    const user = await this.userRepo.findOne({ name: username as string });
+    const user = await this.userRepo.findOne({
+      where: { name: username as string },
+    });
     if (!user) {
       console.error('User not found');
       return false;

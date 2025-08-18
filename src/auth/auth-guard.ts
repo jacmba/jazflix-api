@@ -43,7 +43,9 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    const user = await this.userRepo.findOne({ name: tokenUserName as string });
+    const user = await this.userRepo.findOne({
+      where: { name: tokenUserName as string },
+    });
 
     if (!user) {
       console.error(`User ${tokenUserName} not found`);

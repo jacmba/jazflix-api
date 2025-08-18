@@ -31,7 +31,7 @@ export class MoviesService {
   }
 
   async findOne(id: string, start: string, end: string): Promise<VideoDto> {
-    const movie: Movie = await this.moviesRepository.findOne(id);
+    const movie: Movie = await this.moviesRepository.findOne({ where: { id } });
     const a = start && start.length > 0 ? parseInt(start) : undefined;
     const b = end && end.length > 0 ? parseInt(end) : undefined;
     return this.loader.load(movie.video, a, b);
